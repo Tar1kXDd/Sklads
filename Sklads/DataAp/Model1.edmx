@@ -1,0 +1,349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Test_zadanieModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Edinica_izmerenia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Edinica_izmerenia" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Test_zadanie.dbo.Materiale" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="Materiale">
+          <Key>
+            <PropertyRef Name="Nomer" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="Edinica_izmerenia" />
+            <PropertyRef Name="ostatok" />
+            <PropertyRef Name="sklad" />
+          </Key>
+          <Property Name="Nomer" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Edinica_izmerenia" Type="int" Nullable="false" />
+          <Property Name="ostatok" Type="int" Nullable="false" />
+          <Property Name="sklad" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "Test_zadanie.dbo.Registr" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="Registr">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Login_user" />
+            <PropertyRef Name="Pasword_user" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Login_user" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pasword_user" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="Nomer" />
+          </Key>
+          <Property Name="Nomer" Type="int" Nullable="false" />
+          <Property Name="Adres" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Type_Materialov" Type="int" Nullable="false" />
+          <Property Name="rastoianie_do_oblasnogo_centra" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Type_materiala">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Materiale_Edinica_izmerenia">
+          <End Role="Edinica_izmerenia" Type="Self.Edinica_izmerenia" Multiplicity="1" />
+          <End Role="Materiale" Type="Self.Materiale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Edinica_izmerenia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiale">
+              <PropertyRef Name="Edinica_izmerenia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiale_Sklad">
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="1" />
+          <End Role="Materiale" Type="Self.Materiale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="Nomer" />
+            </Principal>
+            <Dependent Role="Materiale">
+              <PropertyRef Name="sklad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_Type_materiala">
+          <End Role="Type_materiala" Type="Self.Type_materiala" Multiplicity="1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_materiala">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="Type_Materialov" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Test_zadanieModelContainer">
+          <EntitySet Name="Edinica_izmerenia" EntityType="Self.Edinica_izmerenia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Type_materiala" EntityType="Self.Type_materiala" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materiale" EntityType="Self.Materiale" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Materiale].[Nomer] AS [Nomer], 
+    [Materiale].[name] AS [name], 
+    [Materiale].[Edinica_izmerenia] AS [Edinica_izmerenia], 
+    [Materiale].[ostatok] AS [ostatok], 
+    [Materiale].[sklad] AS [sklad]
+    FROM [dbo].[Materiale] AS [Materiale]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Registr" EntityType="Self.Registr" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Registr].[Id] AS [Id], 
+    [Registr].[Login_user] AS [Login_user], 
+    [Registr].[Pasword_user] AS [Pasword_user]
+    FROM [dbo].[Registr] AS [Registr]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Materiale_Edinica_izmerenia" Association="Self.FK_Materiale_Edinica_izmerenia">
+            <End Role="Edinica_izmerenia" EntitySet="Edinica_izmerenia" />
+            <End Role="Materiale" EntitySet="Materiale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiale_Sklad" Association="Self.FK_Materiale_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Materiale" EntitySet="Materiale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_Type_materiala" Association="Self.FK_Sklad_Type_materiala">
+            <End Role="Type_materiala" EntitySet="Type_materiala" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Test_zadanieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Edinica_izmerenia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Edinica_izmerenia1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Materiale" Relationship="Self.FK_Materiale_Edinica_izmerenia" FromRole="Edinica_izmerenia" ToRole="Materiale" />
+        </EntityType>
+        <EntityType Name="Sklad">
+          <Key>
+            <PropertyRef Name="Nomer" />
+          </Key>
+          <Property Name="Nomer" Type="Int32" Nullable="false" />
+          <Property Name="Adres" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Type_Materialov" Type="Int32" Nullable="false" />
+          <Property Name="rastoianie_do_oblasnogo_centra" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Materiale" Relationship="Self.FK_Materiale_Sklad" FromRole="Sklad" ToRole="Materiale" />
+          <NavigationProperty Name="Type_materiala" Relationship="Self.FK_Sklad_Type_materiala" FromRole="Sklad" ToRole="Type_materiala" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Type_materiala">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Sklad" Relationship="Self.FK_Sklad_Type_materiala" FromRole="Type_materiala" ToRole="Sklad" />
+        </EntityType>
+        <EntityType Name="Materiale">
+          <Key>
+            <PropertyRef Name="Nomer" />
+            <PropertyRef Name="name" />
+            <PropertyRef Name="Edinica_izmerenia" />
+            <PropertyRef Name="ostatok" />
+            <PropertyRef Name="sklad" />
+          </Key>
+          <Property Name="Nomer" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Edinica_izmerenia" Type="Int32" Nullable="false" />
+          <Property Name="ostatok" Type="Int32" Nullable="false" />
+          <Property Name="sklad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Edinica_izmerenia1" Relationship="Self.FK_Materiale_Edinica_izmerenia" FromRole="Materiale" ToRole="Edinica_izmerenia" />
+          <NavigationProperty Name="Sklad1" Relationship="Self.FK_Materiale_Sklad" FromRole="Materiale" ToRole="Sklad" />
+        </EntityType>
+        <EntityType Name="Registr">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Login_user" />
+            <PropertyRef Name="Pasword_user" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Login_user" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pasword_user" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Materiale_Edinica_izmerenia">
+          <End Role="Edinica_izmerenia" Type="Self.Edinica_izmerenia" Multiplicity="1" />
+          <End Role="Materiale" Type="Self.Materiale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Edinica_izmerenia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Materiale">
+              <PropertyRef Name="Edinica_izmerenia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Materiale_Sklad">
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="1" />
+          <End Role="Materiale" Type="Self.Materiale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sklad">
+              <PropertyRef Name="Nomer" />
+            </Principal>
+            <Dependent Role="Materiale">
+              <PropertyRef Name="sklad" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sklad_Type_materiala">
+          <End Role="Type_materiala" Type="Self.Type_materiala" Multiplicity="1" />
+          <End Role="Sklad" Type="Self.Sklad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Type_materiala">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Sklad">
+              <PropertyRef Name="Type_Materialov" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Test_zadanieEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Edinica_izmerenia" EntityType="Self.Edinica_izmerenia" />
+          <EntitySet Name="Sklad" EntityType="Self.Sklad" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Type_materiala" EntityType="Self.Type_materiala" />
+          <EntitySet Name="Materiale" EntityType="Self.Materiale" />
+          <EntitySet Name="Registr" EntityType="Self.Registr" />
+          <AssociationSet Name="FK_Materiale_Edinica_izmerenia" Association="Self.FK_Materiale_Edinica_izmerenia">
+            <End Role="Edinica_izmerenia" EntitySet="Edinica_izmerenia" />
+            <End Role="Materiale" EntitySet="Materiale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Materiale_Sklad" Association="Self.FK_Materiale_Sklad">
+            <End Role="Sklad" EntitySet="Sklad" />
+            <End Role="Materiale" EntitySet="Materiale" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sklad_Type_materiala" Association="Self.FK_Sklad_Type_materiala">
+            <End Role="Type_materiala" EntitySet="Type_materiala" />
+            <End Role="Sklad" EntitySet="Sklad" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Test_zadanieModelContainer" CdmEntityContainer="Test_zadanieEntities1">
+          <EntitySetMapping Name="Edinica_izmerenia">
+            <EntityTypeMapping TypeName="Test_zadanieModel.Edinica_izmerenia">
+              <MappingFragment StoreEntitySet="Edinica_izmerenia">
+                <ScalarProperty Name="Edinica_izmerenia1" ColumnName="Edinica_izmerenia" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sklad">
+            <EntityTypeMapping TypeName="Test_zadanieModel.Sklad">
+              <MappingFragment StoreEntitySet="Sklad">
+                <ScalarProperty Name="Nomer" ColumnName="Nomer" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+                <ScalarProperty Name="Type_Materialov" ColumnName="Type_Materialov" />
+                <ScalarProperty Name="rastoianie_do_oblasnogo_centra" ColumnName="rastoianie_do_oblasnogo_centra" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Test_zadanieModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Type_materiala">
+            <EntityTypeMapping TypeName="Test_zadanieModel.Type_materiala">
+              <MappingFragment StoreEntitySet="Type_materiala">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materiale">
+            <EntityTypeMapping TypeName="Test_zadanieModel.Materiale">
+              <MappingFragment StoreEntitySet="Materiale">
+                <ScalarProperty Name="Nomer" ColumnName="Nomer" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="Edinica_izmerenia" ColumnName="Edinica_izmerenia" />
+                <ScalarProperty Name="ostatok" ColumnName="ostatok" />
+                <ScalarProperty Name="sklad" ColumnName="sklad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registr">
+            <EntityTypeMapping TypeName="Test_zadanieModel.Registr">
+              <MappingFragment StoreEntitySet="Registr">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Login_user" ColumnName="Login_user" />
+                <ScalarProperty Name="Pasword_user" ColumnName="Pasword_user" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

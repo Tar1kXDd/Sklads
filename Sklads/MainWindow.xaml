@@ -1,0 +1,40 @@
+﻿<Window x:Class="Sklads.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sklads"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "23*"/>
+            <RowDefinition Height = "200*"/>
+        </Grid.RowDefinitions>
+        
+       
+        <StackPanel Grid.Row="0" Background="#FFFF4A6D" Orientation="Horizontal">
+            <Image Source="/Resurs/282.png" Width="55"
+         HorizontalAlignment="Left" Margin="10 0 0 0 "/>
+            <Button x:Name="btnBack"
+             Width="150" Height="30" FontSize="17"
+             Foreground="White" Background="#FFFF4A"
+             Margin="500 0 0 0 " FontFamily="Tahoma" Click="NavigateMaterial">Материалы</Button>
+            <Button x:Name="btnFaq"
+                Width="150" Height="30" FontSize="17"
+                Foreground="White" Background="#FFFF4A"
+                Margin="5 0 0 0 " FontFamily="Tahoma" Click="NavigateSklad">Склад</Button>
+            <Button x:Name="Dad1"
+                Width="150" Height="30" FontSize="17"
+                Foreground="White" Background="#FFFF4A"
+                Margin="5 0 0 0 " FontFamily="Tahoma" Click="NavigateMainWin">Назад</Button>
+        </StackPanel>
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
+            <Image Source="/Resurs/282.png"
+
+            Opacity="1000"
+             Width="490"/>
+        </StackPanel>
+        <Frame x:Name="frmMain" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>
